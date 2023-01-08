@@ -114,7 +114,7 @@ local Players = game:GetService("Players")
 local CoreGui = game:GetService("CoreGui")
 
 -- Interface Management
-local Rayfield = game:GetObjects("rbxassetid://10804731440")[1]
+local Rayfield = game:GetObjects("rbxassetid://12098037747")[1]
 
 
 
@@ -673,7 +673,7 @@ function Hide()
 							TweenService:Create(element.Title, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
 						end
 						for _, child in ipairs(element:GetChildren()) do
-							if child.ClassName == "Frame" or child.ClassName == "TextLabel" or child.ClassName == "TextBox" or child.ClassName == "ImageButton" or child.ClassName == "ImageLabel" then
+							if child.ClassName == "Frame" or child.ClassName == "TextLabel" or child.ClassName == "TextBox" or child.ClassName == "ImageButton" or child.ClassName == "ImageLabel" or child.ClassName == "ViewportFrame" then
 								child.Visible = false
 							end
 						end
@@ -738,7 +738,7 @@ function Unhide()
 							TweenService:Create(element.Title, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
 						end
 						for _, child in ipairs(element:GetChildren()) do
-							if child.ClassName == "Frame" or child.ClassName == "TextLabel" or child.ClassName == "TextBox" or child.ClassName == "ImageButton" or child.ClassName == "ImageLabel" then
+							if child.ClassName == "Frame" or child.ClassName == "TextLabel" or child.ClassName == "TextBox" or child.ClassName == "ImageButton" or child.ClassName == "ImageLabel" or child.ClassName == "ViewportFrame" then
 								child.Visible = true
 							end
 						end
@@ -781,7 +781,7 @@ function Maximise()
 							TweenService:Create(element.Title, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
 						end
 						for _, child in ipairs(element:GetChildren()) do
-							if child.ClassName == "Frame" or child.ClassName == "TextLabel" or child.ClassName == "TextBox" or child.ClassName == "ImageButton" or child.ClassName == "ImageLabel" then
+							if child.ClassName == "Frame" or child.ClassName == "TextLabel" or child.ClassName == "TextBox" or child.ClassName == "ImageButton" or child.ClassName == "ImageLabel" or child.ClassName == "ViewportFrame" then
 								child.Visible = true
 							end
 						end
@@ -845,7 +845,7 @@ function Minimise()
 							TweenService:Create(element.Title, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
 						end
 						for _, child in ipairs(element:GetChildren()) do
-							if child.ClassName == "Frame" or child.ClassName == "TextLabel" or child.ClassName == "TextBox" or child.ClassName == "ImageButton" or child.ClassName == "ImageLabel" then
+							if child.ClassName == "Frame" or child.ClassName == "TextLabel" or child.ClassName == "TextBox" or child.ClassName == "ImageButton" or child.ClassName == "ImageLabel" or child.ClassName == "ViewportFrame" then
 								child.Visible = false
 							end
 						end
@@ -1315,6 +1315,57 @@ function RayfieldLibrary:CreateWindow(Settings)
 			end
 
 			return ButtonValue
+		end
+		
+		-- Welcomer
+		function Tab:CreateWelcomer(WelcomerSettings) -- by Untyper (simplistic welcoming for hubs)
+			local Welcomer = Elements.Template.Welcomer:Clone()
+			Button.Description.Text = "Welcome, "..game.Players.LocalPlayer.Name.."!"
+			if not WelcomerSettings.ImageType then
+				WelcomerSettings.ImageType = "Default"
+			end
+			if WelcomerSettings.ImageType == "Default" then
+				Welcomer.You.UICorner.CornerRadius = UDim.new(0,12)
+			elseif WelcomerSettings.ImageType == "Circle" then
+				Welcomer.You.UICorner.CornerRadius = UDim.new(1,0)
+			elseif WelcomerSettings.ImageType == "Square" then
+				Welcomer.You.UICorner:Destroy()
+			end
+			local Camera2 = Instance.new("Camera",Welcomer.You)
+			local WrldModel = Instance.new("WorldModel",Camera2)
+			Camera2.CameraType = Enum.CameraType.Scriptable
+			Welcomer.You.CurrentCamera = Camera2
+			local Character = game.Players.LocalPlayer.Character:Clone()
+			Character.Parent = WrldModel
+			local Part1 = Instance.new("Part",WrldModel)
+			local Part2 = Instance.new("Part",WlrdModel)
+			Part1.Anchored = true
+			Part2.Anchored = true
+			Part1.Transparency = 1
+			Part2.Transparency = 1
+			Part1.CFrame = (Character.Head.CFrame*CFrame.new(0,0,-5))*CFrame.Angles(0,math.rad(180),0)
+			Part2.CFrame = (Character.Head.CFrame*CFrame.new(0,-.2,-8))*CFrame.Angles(math.rad(5),math.rad(180),0)
+			local debounce = false
+			local avatarBust = true
+			Welcomer.You.InputBegan:Connect(function(input)
+				if input.UserInputType == Enum.UserInputType.MouseButton1 then
+					if not debounce then
+						if not avatarBust then
+							avatarBust = true
+							debounce = true
+							TweenService:Create(Camera2,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.Out),{CFrame=Part1.CFrame}):Play()
+							wait(.5)
+							debounce = false
+						elseif avatarBust  then
+							avatarBust = false
+							debounce = true
+							TweenService:Create(Camera2,TweenInfo.new(1,Enum.EasingStyle.Quint,Enum.EasingDirection.Out),{CFrame=Part2.CFrame}):Play()
+							wait(.5)
+							debounce = false
+						end
+					end
+				end
+			end)
 		end
 		
 		-- ColorPicker
