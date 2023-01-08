@@ -1320,7 +1320,7 @@ function RayfieldLibrary:CreateWindow(Settings)
 		-- Welcomer
 		function Tab:CreateWelcomer(WelcomerSettings) -- by Untyper (simplistic welcoming for hubs)
 			local Welcomer = Elements.Template.Welcomer:Clone()
-			Welcomer.Description.Text = "Welcome, "..game.Players.LocalPlayer.Name.."!"
+			Welcomer.domain.Text = "Welcome, "..game.Players.LocalPlayer.Name.."!"
 			if not WelcomerSettings.ImageType then
 				WelcomerSettings.ImageType = "Default"
 			end
